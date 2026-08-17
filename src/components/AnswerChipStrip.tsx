@@ -8,7 +8,7 @@ interface AnswerChipStripProps {
 
 export function AnswerChipStrip({ questions, answers }: AnswerChipStripProps) {
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+    <div className="divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white sm:grid sm:grid-cols-2 sm:divide-y-0 sm:divide-x">
       {questions.map((q) => {
         const answerCode = answers[q.code]
         const answer = q.answers.find((a) => a.code === answerCode)
@@ -16,21 +16,21 @@ export function AnswerChipStrip({ questions, answers }: AnswerChipStripProps) {
         const accent = QUESTION_ACCENTS[q.code]
 
         return (
-          <div
-            key={q.code}
-            className={`relative overflow-hidden rounded-lg border border-slate-200 ${accent.bg} p-4`}
-          >
-            <div
-              className="absolute left-0 top-0 h-full w-1"
+          <div key={q.code} className="flex items-start gap-3 px-5 py-4">
+            <span
+              className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
               style={{ backgroundColor: accent.accent }}
+              aria-hidden="true"
             />
-            <p
-              className="text-xs font-bold uppercase tracking-[0.13em]"
-              style={{ color: accent.accent }}
-            >
-              {q.code} {q.name}
-            </p>
-            <p className="mt-2 text-base font-semibold text-navy">{answer.text}</p>
+            <div className="min-w-0">
+              <p
+                className="text-xs font-bold uppercase tracking-wide"
+                style={{ color: accent.accent }}
+              >
+                {q.code} &middot; {q.name}
+              </p>
+              <p className="mt-1 text-base font-medium text-navy">{answer.text}</p>
+            </div>
           </div>
         )
       })}

@@ -102,18 +102,16 @@ export function LandingScreen({ onStart }: LandingScreenProps) {
       <HorizonHero />
 
       {/* CTA band directly below the hero */}
-      <div className="mx-auto max-w-4xl px-5 pt-14 text-center sm:px-7">
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          <button
-            type="button"
-            onClick={onStart}
-            className="rounded-lg bg-navy px-8 py-3.5 text-base font-semibold text-white transition-colors hover:bg-navy-light"
-          >
-            Get Started
-          </button>
-        </div>
+      <div className="mx-auto max-w-4xl px-5 pt-16 text-center sm:px-7">
+        <button
+          type="button"
+          onClick={onStart}
+          className="rounded-lg bg-navy px-8 py-3.5 text-base font-semibold text-white transition-colors hover:bg-navy-light"
+        >
+          Get Started
+        </button>
 
-        <p className="mt-5 text-sm font-semibold uppercase tracking-wide text-slate-400">
+        <p className="mt-6 text-xs font-semibold uppercase tracking-[0.17em] text-slate-400">
           How It Works
         </p>
         <div className="mt-2 flex flex-wrap justify-center gap-x-8 gap-y-1 text-base text-slate-500">
@@ -121,121 +119,149 @@ export function LandingScreen({ onStart }: LandingScreenProps) {
             <span key={s}>{s}</span>
           ))}
         </div>
-      </div>
 
-      <div className="mx-auto max-w-4xl px-5 pb-16 sm:px-7 sm:pb-24">
-        {/* Feature cards */}
-        <FadeIn delay={0.1} className="mt-12 grid gap-5 sm:grid-cols-3">
+        {/* Feature stat row — dividers, not cards */}
+        <FadeIn
+          delay={0.1}
+          className="mt-14 grid divide-y divide-slate-200 text-left sm:grid-cols-3 sm:divide-x sm:divide-y-0"
+        >
           {FEATURES.map((f) => (
-            <div key={f.title} className="rounded-xl border border-slate-200 bg-white p-6">
+            <div key={f.title} className="py-6 first:pt-0 sm:px-8 sm:py-0 sm:first:pl-0 sm:last:pr-0">
               <p className="text-lg font-semibold text-navy">{f.title}</p>
-              <p className="mt-2 text-base leading-6 text-slate-500">{f.text}</p>
+              <p className="mt-1.5 text-base leading-6 text-slate-500">{f.text}</p>
             </div>
           ))}
         </FadeIn>
+      </div>
 
-        {/* What you'll discover */}
-        <FadeIn delay={0.05} className="mt-20">
-          <p className="text-xs font-bold uppercase tracking-[0.17em] text-slate-400">
-            What you&apos;ll discover
-          </p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-navy sm:text-4xl">
-            See your L&amp;D function more clearly.
-          </h2>
-          <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">
-            The assessment looks beyond individual questions to give you a
-            clearer picture of where your learning function is today and where
-            attention may be needed next.
-          </p>
+      {/* White band: What you'll discover + How it works */}
+      <div className="mt-20 bg-white py-20">
+        <div className="mx-auto max-w-4xl px-5 sm:px-7">
+          <FadeIn className="grid gap-10 lg:grid-cols-5 lg:gap-16">
+            <div className="lg:col-span-2">
+              <p className="text-xs font-bold uppercase tracking-[0.17em] text-slate-400">
+                What you&apos;ll discover
+              </p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-navy sm:text-4xl">
+                See your L&amp;D function more clearly.
+              </h2>
+              <p className="mt-4 text-base leading-7 text-slate-600">
+                The assessment looks beyond individual questions to give you a
+                clearer picture of where your learning function is today and
+                where attention may be needed next.
+              </p>
+            </div>
 
-          <ol className="mt-8 divide-y divide-slate-200 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            {DISCOVER_ITEMS.map((d, i) => {
-              const accent = QUESTION_ACCENTS[d.code]
-              return (
-                <li key={d.code} className="flex items-start gap-5 px-6 py-5">
-                  <span
-                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-bold ${accent.bg} ${accent.text}`}
-                  >
+            <ol className="divide-y divide-slate-200 lg:col-span-3">
+              {DISCOVER_ITEMS.map((d, i) => {
+                const accent = QUESTION_ACCENTS[d.code]
+                return (
+                  <li key={d.code} className="flex items-start gap-5 py-5 first:pt-0 last:pb-0">
+                    <span
+                      className="select-none text-4xl font-bold tabular-nums text-slate-200 sm:text-5xl"
+                      aria-hidden="true"
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <div className="min-w-0 pt-1">
+                      <p className="flex items-center gap-2 text-lg font-semibold text-navy">
+                        <span
+                          className="h-1.5 w-1.5 shrink-0 rounded-full"
+                          style={{ backgroundColor: accent.accent }}
+                        />
+                        {d.name}
+                      </p>
+                      <p className="mt-1 text-base leading-6 text-slate-500">{d.text}</p>
+                    </div>
+                  </li>
+                )
+              })}
+            </ol>
+          </FadeIn>
+
+          <FadeIn className="mt-24">
+            <p className="text-xs font-bold uppercase tracking-[0.17em] text-slate-400">
+              How It Works
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-navy sm:text-4xl">
+              Simple questions. Useful direction.
+            </h2>
+
+            <div className="mt-10 grid gap-10 sm:grid-cols-3 sm:gap-8">
+              {HOW_IT_WORKS.map((s, i) => (
+                <div key={s.step} className="relative">
+                  <span className="text-sm font-bold tabular-nums text-slate-300">
                     {String(i + 1).padStart(2, '0')}
                   </span>
-                  <div className="min-w-0">
-                    <p className="text-lg font-semibold text-navy">{d.name}</p>
-                    <p className="mt-1 text-base leading-6 text-slate-500">{d.text}</p>
-                  </div>
-                </li>
-              )
-            })}
-          </ol>
-        </FadeIn>
+                  <p className="mt-2 text-xl font-semibold text-navy">{s.step}</p>
+                  <p className="mt-2 text-base leading-6 text-slate-500">{s.text}</p>
+                  {i < HOW_IT_WORKS.length - 1 && (
+                    <div
+                      className="absolute top-2 hidden h-px w-8 bg-slate-200 sm:block"
+                      style={{ right: '-2.25rem' }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </FadeIn>
+        </div>
+      </div>
 
-        {/* How it works */}
-        <FadeIn delay={0.05} className="mt-20">
-          <p className="text-xs font-bold uppercase tracking-[0.17em] text-slate-400">
-            How It Works
-          </p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-navy sm:text-4xl">
-            Simple questions. Useful direction.
-          </h2>
-
-          <div className="mt-8 grid gap-5 sm:grid-cols-3">
-            {HOW_IT_WORKS.map((s, i) => (
-              <div key={s.step} className="rounded-xl border border-slate-200 bg-white p-6">
-                <span className="text-sm font-bold text-slate-300">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <p className="mt-1.5 text-lg font-semibold text-navy">{s.step}</p>
-                <p className="mt-2 text-base leading-6 text-slate-500">{s.text}</p>
-              </div>
-            ))}
-          </div>
-        </FadeIn>
-
-        {/* Sample snapshot */}
-        <FadeIn delay={0.05} className="mt-20">
+      <div className="mx-auto max-w-4xl px-5 pb-20 sm:px-7 sm:pb-28">
+        {/* Sample snapshot — framed like a product preview */}
+        <FadeIn className="mt-20">
           <p className="text-xs font-bold uppercase tracking-[0.17em] text-slate-400">
             Your L&amp;D Snapshot
           </p>
-          <div className="mt-4 rounded-xl border border-slate-200 bg-white p-7">
-            <div className="flex flex-wrap items-center justify-between gap-6">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
-                  Current L&amp;D maturity
-                </p>
-                <p className="mt-1.5 text-2xl font-semibold text-navy">
-                  Scaling <span className="text-q1">03</span>
-                </p>
-              </div>
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
-                  Primary Priority
-                </p>
-                <p className="mt-1.5 text-2xl font-semibold text-q2">Capacity</p>
-              </div>
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
-                  Future Focus
-                </p>
-                <p className="mt-1.5 text-2xl font-semibold text-q5">Sustainable Growth</p>
-              </div>
+          <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60">
+            <div className="flex items-center gap-1.5 border-b border-slate-100 bg-slate-50 px-5 py-3">
+              <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
+              <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
+              <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
             </div>
-            <p className="mt-6 text-base leading-7 text-slate-600">
-              Your L&amp;D function has established foundations and is
-              positioned for growth, but capacity and scalability may require
-              greater attention.
-            </p>
-            <ul className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-sm text-slate-500">
-              {SNAPSHOT_BULLETS.map((b) => (
-                <li key={b} className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-q4" />
-                  {b}
-                </li>
-              ))}
-            </ul>
+            <div className="p-7 sm:p-9">
+              <div className="flex flex-wrap items-center justify-between gap-6">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                    Current L&amp;D maturity
+                  </p>
+                  <p className="mt-1.5 text-2xl font-semibold text-navy">
+                    Scaling <span className="text-q1">03</span>
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                    Primary Priority
+                  </p>
+                  <p className="mt-1.5 text-2xl font-semibold text-q2">Capacity</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                    Future Focus
+                  </p>
+                  <p className="mt-1.5 text-2xl font-semibold text-q5">Sustainable Growth</p>
+                </div>
+              </div>
+              <p className="mt-6 text-base leading-7 text-slate-600">
+                Your L&amp;D function has established foundations and is
+                positioned for growth, but capacity and scalability may
+                require greater attention.
+              </p>
+              <ul className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-sm text-slate-500">
+                {SNAPSHOT_BULLETS.map((b) => (
+                  <li key={b} className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-q4" />
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </FadeIn>
 
-        {/* Your result */}
-        <FadeIn delay={0.05} className="mt-20 text-center">
+        {/* Your result — plain, no card, leads into the final CTA */}
+        <FadeIn className="mt-20 text-center">
           <p className="text-xs font-bold uppercase tracking-[0.17em] text-slate-400">
             Your Result
           </p>
@@ -256,29 +282,38 @@ export function LandingScreen({ onStart }: LandingScreenProps) {
           </button>
         </FadeIn>
 
-        {/* Final CTA */}
-        <FadeIn delay={0.05} className="mt-20 rounded-xl bg-navy px-6 py-12 text-center sm:px-12">
-          <p className="text-xs font-bold uppercase tracking-[0.17em] text-white/60">
-            L&amp;D Assessment
-          </p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            Ready to understand your L&amp;D function?
-          </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-white/70">
-            Complete five focused questions and discover what your current
-            learning environment may need next.
-          </p>
-          <button
-            type="button"
-            onClick={onStart}
-            className="mt-7 rounded-lg bg-white px-8 py-3.5 text-base font-semibold text-navy transition-colors hover:bg-white/90"
-          >
-            Get Started
-          </button>
-          <p className="mt-5 text-sm text-white/50">
-            5 questions &middot; Approximately 2 minutes &middot; Personalized
-            assessment
-          </p>
+        {/* Final CTA — the strong visual close */}
+        <FadeIn className="relative mt-14 overflow-hidden rounded-2xl bg-navy px-6 py-14 text-center sm:px-12">
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(circle at 22% 15%, rgba(32,90,158,0.45), transparent 55%), radial-gradient(circle at 85% 85%, rgba(18,133,155,0.3), transparent 50%)',
+            }}
+          />
+          <div className="relative">
+            <p className="text-xs font-bold uppercase tracking-[0.17em] text-white/60">
+              L&amp;D Assessment
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              Ready to understand your L&amp;D function?
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-white/70">
+              Complete five focused questions and discover what your current
+              learning environment may need next.
+            </p>
+            <button
+              type="button"
+              onClick={onStart}
+              className="mt-7 rounded-lg bg-white px-8 py-3.5 text-base font-semibold text-navy transition-colors hover:bg-white/90"
+            >
+              Get Started
+            </button>
+            <p className="mt-5 text-sm text-white/50">
+              5 questions &middot; Approximately 2 minutes &middot;
+              Personalized assessment
+            </p>
+          </div>
         </FadeIn>
       </div>
     </div>

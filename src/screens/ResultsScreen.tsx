@@ -54,19 +54,22 @@ export function ResultsScreen({
         <AnswerChipStrip questions={questions} answers={answers} />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-10">
         <p className="text-xs font-bold uppercase tracking-[0.17em] text-slate-400">
-          Assessment Summary
+          Current Situation
         </p>
-        <div className="mt-3 grid gap-4 sm:grid-cols-2">
-          <ResultSectionCard kind="situation" label="Current Situation" text={summary.situation} />
-          <ResultSectionCard kind="strengths" label="Strengths" text={summary.strengths} />
-          <ResultSectionCard kind="gap" label="Current Gap" text={summary.gap} />
-          <ResultSectionCard kind="risk" label="Business Risk" text={summary.risk} />
-        </div>
+        <p className="mt-3 max-w-2xl text-xl leading-8 text-navy">
+          {summary.situation}
+        </p>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-10 grid gap-6 sm:grid-cols-3">
+        <ResultSectionCard kind="strengths" label="Strengths" text={summary.strengths} />
+        <ResultSectionCard kind="gap" label="Current Gap" text={summary.gap} />
+        <ResultSectionCard kind="risk" label="Business Risk" text={summary.risk} />
+      </div>
+
+      <div className="mt-12 border-t border-slate-200 pt-10">
         <RecommendationPanel
           recommendation={result.recommendation}
           nextStep={result.nextStep}
