@@ -1,4 +1,4 @@
-import { HERO_CHAPTERS } from './heroContent'
+import { HERO_CHAPTERS, HERO_STATS } from './heroContent'
 import { renderHeroLine } from './heroText'
 
 interface HeroFallbackProps {
@@ -65,13 +65,30 @@ export function HeroFallback({ onStart }: HeroFallbackProps) {
             </p>
           ))}
         </div>
-        <button
-          type="button"
-          onClick={onStart}
-          className="mt-9 rounded-lg bg-white px-8 py-3.5 text-base font-semibold text-navy transition-colors hover:bg-white/90"
-        >
-          Get Started
-        </button>
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
+          <button
+            type="button"
+            onClick={onStart}
+            className="rounded-lg bg-white px-8 py-3.5 text-base font-semibold text-navy transition-colors hover:bg-white/90"
+          >
+            Get Started
+          </button>
+          <a
+            href="#discover"
+            className="rounded-lg border border-white/25 px-8 py-3.5 text-base font-semibold text-white transition-colors hover:border-white/50 hover:bg-white/5"
+          >
+            See how it works
+          </a>
+        </div>
+
+        <div className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm text-white/60">
+          {HERO_STATS.map((stat) => (
+            <span key={stat} className="flex items-center gap-2">
+              <span className="h-1 w-1 rounded-full bg-white/40" aria-hidden="true" />
+              {stat}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   )

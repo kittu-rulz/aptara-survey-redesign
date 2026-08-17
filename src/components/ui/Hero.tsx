@@ -1,12 +1,12 @@
-import { lazy, Suspense, useMemo, useState } from 'react'
+import { lazy, Suspense, useMemo } from 'react'
 import { isWebGLAvailable } from '../../lib/webgl'
 import { shouldSkip3D } from '../../lib/deviceCapability'
 import { useReducedMotion } from '../../lib/useReducedMotion'
 import { HeroErrorBoundary } from './HeroErrorBoundary'
 import { HeroFallback } from './HeroFallback'
 
-const Hero3D = lazy(() =>
-  import('./horizon-hero-section').then((m) => ({ default: m.Component })),
+const ShaderHero = lazy(() =>
+  import('./shaderHero').then((m) => ({ default: m.ShaderHero })),
 )
 
 interface HeroProps {
@@ -14,31 +14,30 @@ interface HeroProps {
 }
 
 /**
- * Decides between the 3D hero and the static fallback. Three checks happen
- * before the WebGL/Three.js bundle is even requested (device-capability
+ * Decides between the shader hero and the static fallback. Three checks
+ * happen before the WebGL bundle is even requested (device-capability
  * heuristic, prefers-reduced-motion, WebGL feature detection), so
- * constrained devices and reduced-motion users never pay for the ~1MB
- * three.js/gsap chunk at all. A runtime failure inside the 3D component
- * (via its onError callback) or an unexpected render error (via
- * HeroErrorBoundary) both fall back to the same static hero.
+ * constrained devices and reduced-motion users never pay for the shader
+ * chunk at all. The shader library creates its WebGL context inside an
+ * effect with no error callback exposed, so HeroErrorBoundary (catching
+ * synchronous render-phase throws) is the only remaining runtime defense.
  */
 export function Hero({ onStart }: HeroProps) {
   const prefersReducedMotion = useReducedMotion()
-  const [runtimeError, setRuntimeError] = useState(false)
 
-  const canUse3D = useMemo(
+  const canUseShader = useMemo(
     () => isWebGLAvailable() && !shouldSkip3D(),
     [],
   )
 
-  if (prefersReducedMotion || !canUse3D || runtimeError) {
+  if (prefersReducedMotion || !canUseShader) {
     return <HeroFallback onStart={onStart} />
   }
 
   return (
     <HeroErrorBoundary fallback={<HeroFallback onStart={onStart} />}>
       <Suspense fallback={<HeroFallback onStart={onStart} />}>
-        <Hero3D onStart={onStart} onError={() => setRuntimeError(true)} />
+        <ShaderHero onStart={onStart} />
       </Suspense>
     </HeroErrorBoundary>
   )

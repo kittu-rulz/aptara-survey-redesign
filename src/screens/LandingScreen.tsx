@@ -9,23 +9,6 @@ interface LandingScreenProps {
   onStart: () => void
 }
 
-const STATS = ['5 questions', 'About 2 minutes', 'Personalized result']
-
-const FEATURES = [
-  {
-    title: 'Focused assessment',
-    text: 'Five questions designed to surface meaningful L&D priorities.',
-  },
-  {
-    title: 'Quick to complete',
-    text: 'Complete the assessment in approximately two minutes.',
-  },
-  {
-    title: 'Clear outcome',
-    text: 'Receive a personalized snapshot based on your responses.',
-  },
-]
-
 const DISCOVER_ITEMS: Array<{ code: QuestionCode; name: string; text: string }> = [
   {
     code: 'Q1',
@@ -106,38 +89,14 @@ function FadeIn({
 export function LandingScreen({ onStart }: LandingScreenProps) {
   return (
     <div>
-      {/* 3D hero, with a static fallback for unsupported/constrained/reduced-motion cases */}
+      {/* Shader hero, with a static fallback for unsupported/constrained/reduced-motion
+          cases — stats, headline, and primary/secondary CTAs all live in the hero
+          itself now, so the CTA is reachable without scrolling past supporting sections. */}
       <Hero onStart={onStart} />
 
-      {/* Info band directly below the hero — the primary CTA already lives
-          in the hero itself, so this doesn't repeat it as a second
-          competing button. */}
-      <div className="mx-auto max-w-4xl px-5 pt-16 text-center sm:px-7">
-        <p className="text-xs font-semibold uppercase tracking-[0.17em] text-slate-400">
-          How It Works
-        </p>
-        <div className="mt-2 flex flex-wrap justify-center gap-x-8 gap-y-1 text-base text-slate-500">
-          {STATS.map((s) => (
-            <span key={s}>{s}</span>
-          ))}
-        </div>
-
-        {/* Feature stat row — dividers, not cards */}
-        <FadeIn
-          delay={0.1}
-          className="mt-14 grid divide-y divide-slate-200 text-left sm:grid-cols-3 sm:divide-x sm:divide-y-0"
-        >
-          {FEATURES.map((f) => (
-            <div key={f.title} className="py-6 first:pt-0 sm:px-8 sm:py-0 sm:first:pl-0 sm:last:pr-0">
-              <p className="text-lg font-semibold text-navy">{f.title}</p>
-              <p className="mt-1.5 text-base leading-6 text-slate-500">{f.text}</p>
-            </div>
-          ))}
-        </FadeIn>
-      </div>
-
-      {/* White band: What you'll discover + How it works */}
-      <div className="mt-20 bg-white py-20">
+      {/* White band: What you'll discover + How it works — the hero's secondary
+          CTA ("See how it works") scrolls here. */}
+      <div id="discover" className="scroll-mt-6 bg-white py-20">
         <div className="mx-auto max-w-4xl px-5 sm:px-7">
           <FadeIn className="grid gap-10 lg:grid-cols-5 lg:gap-16">
             <div className="lg:col-span-2">

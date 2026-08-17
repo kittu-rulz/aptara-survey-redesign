@@ -11,19 +11,19 @@ vi.mock('../../lib/deviceCapability', () => ({
 vi.mock('../../lib/useReducedMotion', () => ({
   useReducedMotion: vi.fn(),
 }))
-vi.mock('./horizon-hero-section', () => ({
-  Component: ({
-    onStart,
-    onError,
-  }: {
-    onStart: () => void
-    onError?: () => void
-  }) => (
-    <div data-testid="hero-3d">
-      <button onClick={onStart}>Get Started</button>
-      <button onClick={onError}>Simulate renderer error</button>
-    </div>
-  ),
+
+const shaderHeroState = vi.hoisted(() => ({ shouldThrow: false }))
+vi.mock('./shaderHero', () => ({
+  ShaderHero: ({ onStart }: { onStart: () => void }) => {
+    if (shaderHeroState.shouldThrow) {
+      throw new Error('shader init failed')
+    }
+    return (
+      <div data-testid="hero-3d">
+        <button onClick={onStart}>Get Started</button>
+      </div>
+    )
+  },
 }))
 
 import { isWebGLAvailable } from '../../lib/webgl'
@@ -38,9 +38,10 @@ const mockUseReducedMotion = vi.mocked(useReducedMotion)
 describe('Hero', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    shaderHeroState.shouldThrow = false
   })
 
-  it('renders the 3D hero when WebGL is supported and the device is not constrained', async () => {
+  it('renders the shader hero when WebGL is supported and the device is not constrained', async () => {
     mockIsWebGLAvailable.mockReturnValue(true)
     mockShouldSkip3D.mockReturnValue(false)
     mockUseReducedMotion.mockReturnValue(false)
@@ -86,18 +87,16 @@ describe('Hero', () => {
     expect(await screen.findByRole('button', { name: /get started/i })).toBeInTheDocument()
   })
 
-  it('falls back to the static hero when the 3D component reports a runtime error, and the CTA remains usable', async () => {
+  it('falls back to the static hero when the shader hero throws during render, and the CTA remains usable', async () => {
     mockIsWebGLAvailable.mockReturnValue(true)
     mockShouldSkip3D.mockReturnValue(false)
     mockUseReducedMotion.mockReturnValue(false)
+    shaderHeroState.shouldThrow = true
     const onStart = vi.fn()
+    // React logs the error to the console by default; silence it for this test.
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
 
     render(<Hero onStart={onStart} />)
-
-    const errorButton = await screen.findByRole('button', {
-      name: /simulate renderer error/i,
-    })
-    await userEvent.click(errorButton)
 
     await waitFor(() => {
       expect(screen.queryByTestId('hero-3d')).not.toBeInTheDocument()
@@ -105,5 +104,7 @@ describe('Hero', () => {
     const cta = screen.getByRole('button', { name: /get started/i })
     await userEvent.click(cta)
     expect(onStart).toHaveBeenCalledOnce()
+
+    consoleError.mockRestore()
   })
 })
