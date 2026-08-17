@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* Brand */
+  --color-navy: #071d3d;
+  --color-navy-light: #205a9e;
+
+  /* Per-question accent system (question code -> accent / tint) */
+  --color-q1: #12859b;
+  --color-q1-tint: #eaf6f8;
+  --color-q2: #d98b16;
+  --color-q2-tint: #fff6e7;
+  --color-q3: #c83252;
+  --color-q3-tint: #fff0f3;
+  --color-q4: #168666;
+  --color-q4-tint: #edf8f4;
+  --color-q5: #205a9e;
+  --color-q5-tint: #eef3fa;
+
+  --color-surface: #f4f7fa;
+  --color-surface-alt: #f8fafc;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--color-surface);
+  color: var(--color-navy);
+}
