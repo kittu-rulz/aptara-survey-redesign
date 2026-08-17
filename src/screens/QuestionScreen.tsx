@@ -136,14 +136,15 @@ export function QuestionScreen({
       </motion.div>
 
       {/* Sticky above the safe-area on mobile; normal document flow from
-          sm: up, so it never floats over answer content on larger screens. */}
-      <div className="sticky bottom-0 z-20 -mx-5 mt-8 border-t border-slate-200 bg-white/95 px-5 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-4 backdrop-blur sm:static sm:z-auto sm:mx-0 sm:border-t sm:bg-white sm:px-0 sm:pb-0 sm:pt-6 sm:backdrop-blur-none">
-        <div className="flex items-center justify-between">
+          sm: up. No boxed panel — sits directly on the page so its edges
+          line up with the answer cards above it. */}
+      <div className="sticky bottom-0 z-20 mt-8 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-4 sm:static sm:z-auto sm:pb-0 sm:pt-6">
+        <div className="flex items-center justify-between gap-4">
           <button
             type="button"
             onClick={onPrevious}
             disabled={isFirst}
-            className="text-base font-semibold text-slate-500 transition-colors hover:text-navy disabled:invisible"
+            className="rounded-lg border border-slate-300 bg-white px-7 py-3 text-base font-semibold text-navy transition-colors hover:border-navy disabled:cursor-not-allowed disabled:opacity-30"
           >
             &larr; Previous
           </button>
@@ -157,7 +158,23 @@ export function QuestionScreen({
             {isLast ? 'Submit Assessment' : 'Continue'}
           </button>
         </div>
-        <p id={hintId} className="mt-3 text-center text-sm text-slate-400">
+        <p
+          id={hintId}
+          className={`mt-2.5 flex items-center justify-end gap-1.5 text-right text-sm font-medium ${
+            selected ? 'text-q4' : 'text-slate-400'
+          }`}
+        >
+          {selected && (
+            <svg viewBox="0 0 24 24" fill="none" className="h-3.5 w-3.5" aria-hidden="true">
+              <path
+                d="m5 12 4 4L19 6"
+                stroke="currentColor"
+                strokeWidth={3}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
           {selected ? 'Answer selected' : 'Select one answer to continue'}
         </p>
       </div>

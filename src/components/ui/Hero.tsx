@@ -14,6 +14,23 @@ interface HeroProps {
 }
 
 /**
+ * Fires the same instant this module evaluates (before React has mounted
+ * anything), rather than waiting for Hero's first render to reach the
+ * Suspense boundary — starts the shader chunk's network request as early as
+ * possible so the static-fallback flash is shorter. React.lazy's later
+ * import() call to the same specifier reuses this in-flight/cached module,
+ * so there's no double fetch.
+ */
+if (
+  typeof window !== 'undefined' &&
+  isWebGLAvailable() &&
+  !shouldSkip3D() &&
+  !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+) {
+  import('./shaderHero')
+}
+
+/**
  * Decides between the shader hero and the static fallback. Three checks
  * happen before the WebGL bundle is even requested (device-capability
  * heuristic, prefers-reduced-motion, WebGL feature detection), so
