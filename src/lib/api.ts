@@ -1,5 +1,12 @@
 import type { QuestionsResponse, SubmissionResult, SubmitAnswer } from './types'
 
+/**
+ * Live API client — currently unused by App.tsx in favor of
+ * ./localAssessment (a static, self-contained stand-in), since the backend's
+ * CORS allowlist doesn't cover wherever this gets deployed yet. Swap the
+ * import back in App.tsx once that's sorted out.
+ */
+
 const BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? 'https://aptarabe-qa.tjdem.online'
 

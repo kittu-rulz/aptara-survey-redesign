@@ -5,7 +5,7 @@ import { LandingScreen } from './screens/LandingScreen'
 import { QuestionScreen } from './screens/QuestionScreen'
 import { ProcessingScreen } from './screens/ProcessingScreen'
 import { ResultsScreen } from './screens/ResultsScreen'
-import { getQuestions, submitAssessment } from './lib/api'
+import { getQuestions, submitAssessment } from './lib/localAssessment'
 import type { AnswerCode, Question, QuestionCode, SubmissionResult } from './lib/types'
 import { matrixSample } from './fixtures'
 
