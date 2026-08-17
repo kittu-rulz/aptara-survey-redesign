@@ -5,6 +5,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
+import { HERO_CHAPTERS } from './heroContent'
+import { renderHeroLine } from './heroText'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -33,28 +35,7 @@ interface ThreeState {
   locations: number[]
 }
 
-const CHAPTERS = [
-  {
-    title: 'L&D ASSESSMENT',
-    lines: [
-      'Get a clearer view of your current learning environment,',
-      'and discover where your L&D function can create greater impact.',
-    ],
-  },
-  {
-    title: 'CLARITY',
-    lines: [
-      'The assessment looks beyond individual questions',
-      'to give you a clearer picture of where your learning function is today.',
-    ],
-  },
-  {
-    title: 'DIRECTION',
-    lines: ['Turn your responses into a clearer view', 'of what comes next.'],
-  },
-]
-
-const TOTAL_TRANSITIONS = CHAPTERS.length - 1
+const TOTAL_TRANSITIONS = HERO_CHAPTERS.length - 1
 
 function splitTitle(text: string) {
   return text.split('').map((char, i) => (
@@ -64,7 +45,12 @@ function splitTitle(text: string) {
   ))
 }
 
-export function Component() {
+interface ComponentProps {
+  onStart: () => void
+  onError?: () => void
+}
+
+export function Component({ onStart, onError }: ComponentProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
@@ -427,7 +413,12 @@ export function Component() {
       setIsReady(true)
     }
 
-    initThree()
+    try {
+      initThree()
+    } catch (err) {
+      console.error('Failed to initialize 3D hero, falling back to static hero:', err)
+      onError?.()
+    }
 
     const handleResize = () => {
       if (refs.camera && refs.renderer && refs.composer) {
@@ -553,7 +544,7 @@ export function Component() {
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
 
         {/* Chapter overlays, cross-faded by scroll position */}
-        {CHAPTERS.map((chapter, i) => (
+        {HERO_CHAPTERS.map((chapter, i) => (
           <div
             key={chapter.title}
             className={`absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center transition-opacity duration-500 ${
@@ -569,10 +560,20 @@ export function Component() {
             <div ref={i === 0 ? subtitleRef : undefined} className="mt-7 max-w-2xl">
               {chapter.lines.map((line) => (
                 <p key={line} className="subtitle-line text-base leading-7 text-white/70 sm:text-lg">
-                  {line}
+                  {renderHeroLine(line)}
                 </p>
               ))}
             </div>
+
+            {i === 0 && (
+              <button
+                type="button"
+                onClick={onStart}
+                className="mt-9 rounded-lg bg-white px-8 py-3.5 text-base font-semibold text-navy transition-colors hover:bg-white/90"
+              >
+                Get Started
+              </button>
+            )}
 
             {/* Scroll progress indicator */}
             <div

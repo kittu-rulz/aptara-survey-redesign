@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion'
 import { QUESTION_ACCENTS } from '../theme/tokens'
 import type { QuestionCode } from '../lib/types'
-import { Component as HorizonHero } from '../components/ui/horizon-hero-section'
+import { Hero } from '../components/ui/Hero'
+import { renderHeroLine } from '../components/ui/heroText'
+import { useReducedMotion } from '../lib/useReducedMotion'
 
 interface LandingScreenProps {
   onStart: () => void
@@ -82,6 +84,12 @@ function FadeIn({
   delay?: number
   className?: string
 }) {
+  const prefersReducedMotion = useReducedMotion()
+
+  if (prefersReducedMotion) {
+    return <div className={className}>{children}</div>
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -98,20 +106,14 @@ function FadeIn({
 export function LandingScreen({ onStart }: LandingScreenProps) {
   return (
     <div>
-      {/* 3D hero */}
-      <HorizonHero />
+      {/* 3D hero, with a static fallback for unsupported/constrained/reduced-motion cases */}
+      <Hero onStart={onStart} />
 
-      {/* CTA band directly below the hero */}
+      {/* Info band directly below the hero — the primary CTA already lives
+          in the hero itself, so this doesn't repeat it as a second
+          competing button. */}
       <div className="mx-auto max-w-4xl px-5 pt-16 text-center sm:px-7">
-        <button
-          type="button"
-          onClick={onStart}
-          className="rounded-lg bg-navy px-8 py-3.5 text-base font-semibold text-white transition-colors hover:bg-navy-light"
-        >
-          Get Started
-        </button>
-
-        <p className="mt-6 text-xs font-semibold uppercase tracking-[0.17em] text-slate-400">
+        <p className="text-xs font-semibold uppercase tracking-[0.17em] text-slate-400">
           How It Works
         </p>
         <div className="mt-2 flex flex-wrap justify-center gap-x-8 gap-y-1 text-base text-slate-500">
@@ -143,7 +145,7 @@ export function LandingScreen({ onStart }: LandingScreenProps) {
                 What you&apos;ll discover
               </p>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight text-navy sm:text-4xl">
-                See your L&amp;D function more clearly.
+                {renderHeroLine('See your L&D function more clearly.')}
               </h2>
               <p className="mt-4 text-base leading-7 text-slate-600">
                 The assessment looks beyond individual questions to give you a
@@ -288,7 +290,7 @@ export function LandingScreen({ onStart }: LandingScreenProps) {
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                'radial-gradient(circle at 22% 15%, rgba(32,90,158,0.45), transparent 55%), radial-gradient(circle at 85% 85%, rgba(18,133,155,0.3), transparent 50%)',
+                'radial-gradient(circle at 22% 15%, rgba(32,90,158,0.28), transparent 55%), radial-gradient(circle at 85% 85%, rgba(18,133,155,0.18), transparent 50%)',
             }}
           />
           <div className="relative">
@@ -296,7 +298,7 @@ export function LandingScreen({ onStart }: LandingScreenProps) {
               L&amp;D Assessment
             </p>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              Ready to understand your L&amp;D function?
+              {renderHeroLine('Ready to understand your L&D function?')}
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-white/70">
               Complete five focused questions and discover what your current

@@ -6,6 +6,12 @@ import { QuestionScreen } from './screens/QuestionScreen'
 import { ProcessingScreen } from './screens/ProcessingScreen'
 import { ResultsScreen } from './screens/ResultsScreen'
 import { getQuestions, submitAssessment } from './lib/localAssessment'
+import {
+  clearPersistedState,
+  loadPersistedState,
+  savePersistedState,
+  PERSISTENCE_SCHEMA_VERSION,
+} from './lib/persistence'
 import type { AnswerCode, Question, QuestionCode, SubmissionResult } from './lib/types'
 import { matrixSample } from './fixtures'
 
@@ -21,6 +27,7 @@ function App() {
   const [answers, setAnswers] = useState<Partial<Record<QuestionCode, AnswerCode>>>({})
   const [result, setResult] = useState<SubmissionResult | null>(null)
   const [submitError, setSubmitError] = useState('')
+  const [isNavigating, setIsNavigating] = useState(false)
 
   const mockKey = useMemo(
     () => new URLSearchParams(window.location.search).get('mock'),
@@ -32,6 +39,27 @@ function App() {
       .then((res) => setQuestions(res.questions))
       .catch(() => setQuestionsError('Unable to load assessment questions.'))
   }, [])
+
+  // Resume an in-progress assessment (answers + position) after a refresh
+  // or a closed/reopened tab, once the question set has loaded.
+  useEffect(() => {
+    if (mockKey || questions.length === 0) return
+    const saved = loadPersistedState()
+    if (!saved || Object.keys(saved.answers).length === 0) return
+    setAnswers(saved.answers)
+    setCurrentIndex(saved.currentIndex)
+    setScreen('question')
+  }, [mockKey, questions])
+
+  // Persist answers/position while the assessment is in progress.
+  useEffect(() => {
+    if (screen !== 'question') return
+    savePersistedState({
+      version: PERSISTENCE_SCHEMA_VERSION,
+      currentIndex,
+      answers,
+    })
+  }, [screen, currentIndex, answers])
 
   // Dev shortcut: ?mock=A-B-B-A-A jumps straight to the results screen using
   // a pulled fixture, for iterating on the results layout without spamming
@@ -59,14 +87,18 @@ function App() {
   }
 
   function handleNext() {
+    if (isNavigating) return
     setCurrentIndex((i) => Math.min(i + 1, questions.length - 1))
   }
 
   function handlePrevious() {
+    if (isNavigating) return
     setCurrentIndex((i) => Math.max(i - 1, 0))
   }
 
   async function handleSubmit() {
+    if (isNavigating) return
+    setIsNavigating(true)
     setScreen('processing')
     setSubmitError('')
     const payload = QUESTION_ORDER.filter((q) => answers[q]).map((q) => ({
@@ -77,15 +109,18 @@ function App() {
     const [res] = await Promise.all([
       submitAssessment(payload),
       new Promise((resolve) => setTimeout(resolve, 700)),
-    ]).catch((err) => {
-      setSubmitError('Something went wrong preparing your result. Please try again.')
-      setScreen('question')
-      throw err
-    })
+    ])
+      .catch((err) => {
+        setSubmitError('Something went wrong preparing your result. Please try again.')
+        setScreen('question')
+        throw err
+      })
+      .finally(() => setIsNavigating(false))
 
     if (res) {
       setResult(res)
       setScreen('results')
+      clearPersistedState()
     }
   }
 
@@ -95,6 +130,7 @@ function App() {
     setResult(null)
     setSubmitError('')
     setScreen('landing')
+    clearPersistedState()
   }
 
   return (
@@ -121,6 +157,7 @@ function App() {
               onNext={handleNext}
               onPrevious={handlePrevious}
               onSubmit={handleSubmit}
+              onStartOver={handleRestart}
             />
             {submitError && (
               <p className="mx-auto -mt-4 max-w-2xl px-5 text-center text-sm text-q3">
