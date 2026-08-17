@@ -70,7 +70,6 @@ export function Component() {
   const titleRef = useRef<HTMLHeadingElement>(null)
   const subtitleRef = useRef<HTMLDivElement>(null)
   const scrollProgressRef = useRef<HTMLDivElement>(null)
-  const menuRef = useRef<HTMLDivElement>(null)
 
   const smoothCameraPos = useRef({ x: 0, y: 30, z: 100 })
 
@@ -462,15 +461,12 @@ export function Component() {
   useEffect(() => {
     if (!isReady) return
 
-    gsap.set([menuRef.current, titleRef.current, subtitleRef.current, scrollProgressRef.current], {
+    gsap.set([titleRef.current, subtitleRef.current, scrollProgressRef.current], {
       visibility: 'visible',
     })
 
     const tl = gsap.timeline()
 
-    if (menuRef.current) {
-      tl.from(menuRef.current, { x: -100, opacity: 0, duration: 1, ease: 'power3.out' })
-    }
     if (titleRef.current) {
       const chars = titleRef.current.querySelectorAll('.title-char')
       tl.from(
@@ -555,24 +551,6 @@ export function Component() {
     <div ref={containerRef} className="relative" style={{ height: '300vh' }}>
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#030a16]">
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
-
-        {/* Side menu */}
-        <div
-          ref={menuRef}
-          className="invisible fixed left-6 top-1/2 z-20 flex -translate-y-1/2 flex-col items-center gap-10"
-        >
-          <div className="flex flex-col gap-2">
-            <span className="h-0.5 w-7 rounded-full bg-white/80" />
-            <span className="h-0.5 w-7 rounded-full bg-white/80" />
-            <span className="h-0.5 w-7 rounded-full bg-white/80" />
-          </div>
-          <span
-            className="text-xs font-bold tracking-[0.3em] text-white/60"
-            style={{ writingMode: 'vertical-rl' }}
-          >
-            APTARA
-          </span>
-        </div>
 
         {/* Chapter overlays, cross-faded by scroll position */}
         {CHAPTERS.map((chapter, i) => (
