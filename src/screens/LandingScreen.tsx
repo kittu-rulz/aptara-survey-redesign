@@ -148,20 +148,17 @@ export function LandingScreen({ onStart }: LandingScreenProps) {
               Simple questions. Useful direction.
             </h2>
 
-            <div className="mt-10 grid gap-10 sm:grid-cols-3 sm:gap-8">
+            <div className="mt-10 grid gap-10 divide-slate-200 sm:grid-cols-3 sm:gap-0 sm:divide-x">
               {HOW_IT_WORKS.map((s, i) => (
-                <div key={s.step} className="relative">
-                  <span className="text-sm font-bold tabular-nums text-slate-300">
+                <div key={s.step} className="sm:px-8 sm:first:pl-0 sm:last:pr-0">
+                  <span
+                    className="select-none text-4xl font-bold tabular-nums text-slate-200"
+                    aria-hidden="true"
+                  >
                     {String(i + 1).padStart(2, '0')}
                   </span>
-                  <p className="mt-2 text-xl font-semibold text-navy">{s.step}</p>
+                  <p className="mt-3 text-xl font-semibold text-navy">{s.step}</p>
                   <p className="mt-2 text-base leading-6 text-slate-500">{s.text}</p>
-                  {i < HOW_IT_WORKS.length - 1 && (
-                    <div
-                      className="absolute top-2 hidden h-px w-8 bg-slate-200 sm:block"
-                      style={{ right: '-2.25rem' }}
-                    />
-                  )}
                 </div>
               ))}
             </div>
@@ -187,9 +184,7 @@ export function LandingScreen({ onStart }: LandingScreenProps) {
                   <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
                     Current L&amp;D maturity
                   </p>
-                  <p className="mt-1.5 text-2xl font-semibold text-navy">
-                    Scaling <span className="text-q1">03</span>
-                  </p>
+                  <p className="mt-1.5 text-2xl font-semibold text-q1">Scaling</p>
                 </div>
                 <div>
                   <p className="text-xs font-bold uppercase tracking-wide text-slate-400">
