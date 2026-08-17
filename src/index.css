@@ -33,3 +33,44 @@ body {
   background: var(--color-surface);
   color: var(--color-navy);
 }
+
+/*
+ * Shared button system — every clickable action in the app should compose
+ * one of these instead of hand-rolling states, so hover/active/disabled/
+ * cursor behavior stays consistent everywhere.
+ */
+@layer components {
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost,
+  .btn-on-dark-primary,
+  .btn-on-dark-secondary {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg text-base font-semibold transition-all duration-150 active:scale-[0.97] disabled:cursor-not-allowed disabled:active:scale-100;
+  }
+  .btn-primary {
+    @apply bg-navy px-7 py-3 text-white hover:-translate-y-0.5 hover:bg-navy-light hover:shadow-md disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-40 disabled:shadow-none;
+  }
+  .btn-secondary {
+    @apply border border-slate-300 bg-white px-7 py-3 text-navy hover:-translate-y-0.5 hover:border-navy hover:shadow-sm disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-30 disabled:shadow-none;
+  }
+  .btn-ghost {
+    @apply px-3 py-2 text-slate-500 hover:bg-slate-100 hover:text-navy disabled:pointer-events-none disabled:opacity-40 disabled:hover:bg-transparent;
+  }
+  .btn-on-dark-primary {
+    @apply bg-white px-8 py-3.5 text-navy hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-40;
+  }
+  .btn-on-dark-secondary {
+    @apply border border-white/25 px-8 py-3.5 text-white hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/5 disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-40;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none !important;
+  }
+  .btn:hover,
+  .btn:active {
+    transform: none !important;
+  }
+}

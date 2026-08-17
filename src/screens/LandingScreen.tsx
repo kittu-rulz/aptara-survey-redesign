@@ -232,7 +232,7 @@ export function LandingScreen({ onStart }: LandingScreenProps) {
           <button
             type="button"
             onClick={onStart}
-            className="mt-7 rounded-lg border border-navy px-8 py-3.5 text-base font-semibold text-navy transition-colors hover:bg-navy hover:text-white"
+            className="btn mt-7 border border-navy px-8 py-3.5 text-navy hover:-translate-y-0.5 hover:bg-navy hover:text-white hover:shadow-md"
           >
             Start Assessment
           </button>
@@ -258,11 +258,7 @@ export function LandingScreen({ onStart }: LandingScreenProps) {
               Complete five focused questions and discover what your current
               learning environment may need next.
             </p>
-            <button
-              type="button"
-              onClick={onStart}
-              className="mt-7 rounded-lg bg-white px-8 py-3.5 text-base font-semibold text-navy transition-colors hover:bg-white/90"
-            >
+            <button type="button" onClick={onStart} className="btn-on-dark-primary mt-7">
               Get Started
             </button>
             <p className="mt-5 text-sm text-white/50">

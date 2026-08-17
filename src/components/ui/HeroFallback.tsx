@@ -66,17 +66,10 @@ export function HeroFallback({ onStart }: HeroFallbackProps) {
           ))}
         </div>
         <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
-          <button
-            type="button"
-            onClick={onStart}
-            className="rounded-lg bg-white px-8 py-3.5 text-base font-semibold text-navy transition-colors hover:bg-white/90"
-          >
+          <button type="button" onClick={onStart} className="btn-on-dark-primary">
             Get Started
           </button>
-          <a
-            href="#discover"
-            className="rounded-lg border border-white/25 px-8 py-3.5 text-base font-semibold text-white transition-colors hover:border-white/50 hover:bg-white/5"
-          >
+          <a href="#discover" className="btn-on-dark-secondary">
             See how it works
           </a>
         </div>

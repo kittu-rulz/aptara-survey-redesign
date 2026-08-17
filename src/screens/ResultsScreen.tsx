@@ -136,17 +136,24 @@ export function ResultsScreen({
       </p>
 
       <div className="mt-6 flex flex-wrap items-center justify-center gap-4 border-t border-slate-200 pt-7">
-        <button
-          type="button"
-          onClick={handleCopy}
-          className="rounded-lg border border-slate-300 px-5 py-2.5 text-base font-semibold text-navy transition-colors hover:border-navy"
-        >
+        <button type="button" onClick={handleCopy} className="btn-secondary px-5 py-2.5">
+          {copied && (
+            <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 text-q4" aria-hidden="true">
+              <path
+                d="m5 12 4 4L19 6"
+                stroke="currentColor"
+                strokeWidth={3}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
           {copied ? 'Copied to clipboard' : 'Copy summary'}
         </button>
         <button
           type="button"
           onClick={onRestart}
-          className="text-base font-semibold text-q5 transition-colors hover:text-navy"
+          className="btn border border-q5/30 px-5 py-2.5 text-q5 hover:-translate-y-0.5 hover:border-q5 hover:bg-q5-tint hover:shadow-sm"
         >
           &larr; Restart Assessment
         </button>

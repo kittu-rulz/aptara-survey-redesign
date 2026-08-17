@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { MeshGradient, PulsingBorder } from '@paper-design/shaders-react'
+import { MeshGradient } from '@paper-design/shaders-react'
 import { HERO_CHAPTERS, HERO_STATS } from './heroContent'
 import { renderHeroLine } from './heroText'
 
@@ -108,17 +108,10 @@ export function ShaderHero({ onStart }: ShaderHeroProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.9 }}
           >
-            <button
-              type="button"
-              onClick={onStart}
-              className="rounded-lg bg-white px-8 py-3.5 text-base font-semibold text-navy transition-colors hover:bg-white/90"
-            >
+            <button type="button" onClick={onStart} className="btn-on-dark-primary">
               Get Started
             </button>
-            <a
-              href="#discover"
-              className="rounded-lg border border-white/25 px-8 py-3.5 text-base font-semibold text-white transition-colors hover:border-white/50 hover:bg-white/5"
-            >
+            <a href="#discover" className="btn-on-dark-secondary">
               See how it works
             </a>
           </motion.div>
@@ -136,44 +129,6 @@ export function ShaderHero({ onStart }: ShaderHeroProps) {
               </span>
             ))}
           </motion.div>
-        </div>
-      </div>
-
-      <div className="absolute bottom-8 right-8 z-10 hidden sm:block">
-        <div className="relative flex h-20 w-20 items-center justify-center">
-          <PulsingBorder
-            colors={['#12859B', '#205A9E', '#ffffff', '#0a2540']}
-            colorBack="#00000000"
-            speed={1.2}
-            roundness={1}
-            thickness={0.1}
-            softness={0.25}
-            intensity={4}
-            spots={5}
-            spotSize={0.1}
-            pulse={0.1}
-            smoke={0.4}
-            smokeSize={4}
-            scale={0.65}
-            style={{ width: '60px', height: '60px', borderRadius: '50%' }}
-          />
-          <motion.svg
-            className="absolute inset-0 h-full w-full"
-            viewBox="0 0 100 100"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 24, repeat: Number.POSITIVE_INFINITY, ease: 'linear' }}
-            style={{ transform: 'scale(1.6)' }}
-            aria-hidden="true"
-          >
-            <defs>
-              <path id="hero-ring" d="M 50, 50 m -38, 0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0" />
-            </defs>
-            <text className="fill-white/70 text-[9px] font-medium">
-              <textPath href="#hero-ring" startOffset="0%">
-                Aptara &bull; L&amp;D Assessment &bull; Aptara &bull; L&amp;D Assessment &bull;
-              </textPath>
-            </text>
-          </motion.svg>
         </div>
       </div>
     </div>

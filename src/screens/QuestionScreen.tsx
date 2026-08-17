@@ -89,8 +89,10 @@ export function QuestionScreen({
         <button
           type="button"
           onClick={handleStartOverClick}
-          className={`shrink-0 whitespace-nowrap text-xs font-semibold transition-colors ${
-            confirmingStartOver ? 'text-q3' : 'text-slate-400 hover:text-navy'
+          className={`btn shrink-0 whitespace-nowrap rounded-md px-2.5 py-1.5 text-xs ${
+            confirmingStartOver
+              ? 'bg-q3-tint text-q3 hover:bg-q3-tint'
+              : 'text-slate-400 hover:bg-slate-100 hover:text-navy'
           }`}
         >
           {confirmingStartOver ? 'Click again to confirm' : 'Start Over'}
@@ -140,12 +142,7 @@ export function QuestionScreen({
           line up with the answer cards above it. */}
       <div className="sticky bottom-0 z-20 mt-8 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-4 sm:static sm:z-auto sm:pb-0 sm:pt-6">
         <div className="flex items-center justify-between gap-4">
-          <button
-            type="button"
-            onClick={onPrevious}
-            disabled={isFirst}
-            className="rounded-lg border border-slate-300 bg-white px-7 py-3 text-base font-semibold text-navy transition-colors hover:border-navy disabled:cursor-not-allowed disabled:opacity-30"
-          >
+          <button type="button" onClick={onPrevious} disabled={isFirst} className="btn-secondary">
             &larr; Previous
           </button>
           <button
@@ -153,7 +150,7 @@ export function QuestionScreen({
             onClick={isLast ? onSubmit : onNext}
             disabled={!selected}
             aria-describedby={hintId}
-            className="rounded-lg bg-navy px-7 py-3 text-base font-semibold text-white transition-colors hover:bg-navy-light disabled:cursor-not-allowed disabled:opacity-40"
+            className="btn-primary"
           >
             {isLast ? 'Submit Assessment' : 'Continue'}
           </button>
